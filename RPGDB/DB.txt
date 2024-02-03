@@ -1,0 +1,99 @@
+-- Database: dedrpg
+
+-- DROP DATABASE IF EXISTS "dedrpg";
+
+CREATE DATABASE "dedrpg"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Portuguese_Brazil.1252'
+    LC_CTYPE = 'Portuguese_Brazil.1252'
+    LOCALE_PROVIDER = 'libc'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+-- Table: public.atributos
+
+-- DROP TABLE IF EXISTS public.atributos;
+
+CREATE TABLE IF NOT EXISTS public.atributos
+(
+    idfk integer NOT NULL,
+    forca integer NOT NULL DEFAULT 8,
+    destreza integer NOT NULL DEFAULT 8,
+    constituicao integer NOT NULL DEFAULT 8,
+    sabedoria integer NOT NULL DEFAULT 8,
+    inteligencia integer NOT NULL DEFAULT 8,
+    carisma integer NOT NULL DEFAULT 8,
+    CONSTRAINT idfk FOREIGN KEY (idfk)
+        REFERENCES public.personagem (identificador) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.atributos
+    OWNER to postgres;
+
+-- Table: public.concluiu
+
+-- DROP TABLE IF EXISTS public.concluiu;
+
+CREATE TABLE IF NOT EXISTS public.concluiu
+(
+    fk_id_personagem integer NOT NULL,
+    fk_id_mission integer NOT NULL,
+    CONSTRAINT fk_id_mission FOREIGN KEY (fk_id_mission)
+        REFERENCES public.missao (id_mission) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_id_personagem FOREIGN KEY (fk_id_personagem)
+        REFERENCES public.personagem (identificador) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.concluiu
+    OWNER to postgres;
+
+-- Table: public.missao
+
+-- DROP TABLE IF EXISTS public.missao;
+
+CREATE TABLE IF NOT EXISTS public.missao
+(
+    id_mission integer NOT NULL,
+    nome character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    recompensa character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT pk_id_mission PRIMARY KEY (id_mission)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.missao
+    OWNER to postgres;
+
+-- Table: public.personagem
+
+-- DROP TABLE IF EXISTS public.personagem;
+
+CREATE TABLE IF NOT EXISTS public.personagem
+(
+    identificador integer NOT NULL,
+    nome character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    raca character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    ac integer DEFAULT 1,
+    nivel integer DEFAULT 1,
+    classe character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    subclasse character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT pk_id PRIMARY KEY (identificador)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.personagem
+    OWNER to postgres;
